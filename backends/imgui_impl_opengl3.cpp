@@ -110,10 +110,16 @@
 //  ES 3.0    300       "#version 300 es"   = WebGL 2.0
 //----------------------------------------
 
+
+Severity	Code	Description	Project	File	Line	Suppression State	Details
+Error	LNK2005	"bool __cdecl ImGui_ImplOpenGL3_CreateDeviceObjects(void)" (? ImGui_ImplOpenGL3_CreateDeviceObjects@@YA_NXZ) already defined in ImGuiOpenGLRenderer.obj	SIDT	C : \Dev\SIDT\build\SIDT\imgui_impl_opengl3.obj	1
+
+
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
+#include "sdpch.h"
 #include "imgui.h"
 #ifndef IMGUI_DISABLE
 #include "imgui_impl_opengl3.h"
@@ -170,7 +176,7 @@
 // - You can temporarily use an unstripped version. See https://github.com/dearimgui/gl3w_stripped/releases
 // Changes to this backend using new APIs should be accompanied by a regenerated stripped loader version.
 #define IMGL3W_IMPL
-#define IMGUI_IMPL_OPENGL_LOADER_IMGL3W
+#define IMGUI_IMPL_OPENGL_LOADER_GLAD
 #include "imgui_impl_opengl3_loader.h"
 #endif
 

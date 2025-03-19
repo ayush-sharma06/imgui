@@ -1,0 +1,52 @@
+cmake_minimum_required(VERSION 3.16...3.28 FATAL_ERROR)
+
+project(ImGui VERSION 3.5.0 LANGUAGES CXX)
+
+set(ImGui_LIBRARY_TYPE STATIC)
+
+if(NOT DEFINED OUTPUT_DIR)
+    set(OUTPUT_DIR $<CONFIG>)
+endif()
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/${PROJECT_NAME}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/${PROJECT_NAME}")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/${PROJECT_NAME}")
+
+# Define the common files
+set(ImGui_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/imconfig.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imgui.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imgui.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imgui_draw.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imgui_internal.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imgui_widgets.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imstb_rectpack.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imstb_textedit.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imstb_truetype.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imgui_demo.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imgui_tables.cpp"
+)
+
+add_library(ImGui ${ImGui_LIBRARY_TYPE} ${ImGui_FILES})
+
+target_include_directories(ImGui PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
+
+# Set system-specific properties
+if (WIN32)
+    set(CMAKE_SYSTEM_VERSION "latest")  # Equivalent to systemversion "latest"
+    set(CMAKE_CXX_STANDARD 17)  # Equivalent to cppdialect "C++17"
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    set(CMAKE_CXX_EXTENSIONS OFF)  # Ensures compliance with the standard (not compiler-specific)
+
+    # Equivalent to staticruntime "On"
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
+
+# Set configurations
+# Debug Configuration
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd /Zi")  # runtime "Debug", symbols "On"
+
+# Release Configuration
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD /O2")  # runtime "Release", optimize "On"
